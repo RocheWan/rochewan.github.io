@@ -440,5 +440,26 @@
             modal.classList.remove('active');
         }
     </script>
+<div id="clap-wrapper" style="text-align:center; margin: 20px 0;">
+    <button id="main-clap-btn" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); border-radius:30px; padding:10px 20px; color:white; cursor:pointer;">
+        👏 <span id="clap-num">0</span>
+    </button>
+</div>
+
+<script>
+document.getElementById('main-clap-btn').addEventListener('click', (e) => {
+    const num = document.getElementById('clap-num');
+    num.innerText = parseInt(num.innerText) + 1;
+    for(let i=0; i<6; i++) {
+        const p = document.createElement('div');
+        p.innerText = ['✨','💖','👏'][Math.floor(Math.random()*3)];
+        p.style.cssText = `position:fixed; left:${e.clientX}px; top:${e.clientY}px; pointer-events:none; transition:2s; z-index:9999;`;
+        document.body.appendChild(p);
+        const x = (Math.random()-0.5)*200, y = (Math.random()-0.5)*200;
+        setTimeout(() => { p.style.transform = `translate(${x}px, ${y}px) scale(0)`; p.style.opacity = '0'; }, 10);
+        setTimeout(() => p.remove(), 2000);
+    }
+});
+</script>    
 </body>
 </html>
