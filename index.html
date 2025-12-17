@@ -1,30 +1,21 @@
 <!DOCTYPE html>
-<!--
-  Template: GLASS v1.0
-  Author: Haruki Tominaga
-  License: https://amix-design.com/tominaga/eyan-theme/license 
-  © 2025 EYAN / トミナガハルキ
--->
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
 
-    <title>Portfolio - GLASS</title>
+    <title>RUOCHEN WANG - Portfolio</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&family=M+PLUS+Rounded+1c:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
-        /* 【デザイン設定エリア】
-           ここを変えるだけでサイト全体の色味が変わります。
-        */
         :root {
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); /* 全体の背景色 */
-            --glass-bg: rgba(255, 255, 255, 0.25);   /* ガラスの背景色（透明度） */
-            --glass-border: rgba(255, 255, 255, 0.5); /* ガラスの枠線 */
-            --text-main: #444;                        /* 文字色 */
-            --accent: #8e9eab;                        /* アクセントカラー */
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #444;
+            --accent: #8e9eab;
         }
 
         body {
@@ -38,19 +29,11 @@
             position: relative;
         }
 
-        /* ふわっと表示されるアニメーション */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 背景の動くボール (装飾) */
         .blob {
             position: fixed;
             border-radius: 50%;
@@ -59,7 +42,6 @@
             opacity: 0.8;
             animation: float 10s infinite alternate;
         }
-        /* ボールの色とサイズ設定 */
         .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #ffafbd; }
         .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #2193b0; animation-delay: -5s; }
 
@@ -74,7 +56,6 @@
             padding: 4rem 2rem;
         }
 
-        /* ガラスカードのデザイン定義 */
         .glass-card {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
@@ -86,7 +67,6 @@
             margin-bottom: 2rem;
         }
 
-        /* プロフィールセクション */
         .profile-card {
             text-align: center;
             padding: 4rem 2rem;
@@ -105,18 +85,8 @@
             background-color: #fff;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            margin: 0.5rem 0;
-            color: #333;
-        }
-
-        .role {
-            font-weight: 500;
-            color: #666;
-            margin-bottom: 2rem;
-            letter-spacing: 0.05em;
-        }
+        h1 { font-size: 2.5rem; margin: 0.5rem 0; color: #333; }
+        .role { font-weight: 500; color: #666; margin-bottom: 2rem; letter-spacing: 0.05em; }
 
         .links-row {
             display: flex;
@@ -125,7 +95,6 @@
             flex-wrap: wrap;
         }
         
-        /* リンクボタンのデザイン */
         .glass-btn {
             background: rgba(255, 255, 255, 0.4);
             padding: 0.8rem 1.5rem;
@@ -135,6 +104,12 @@
             font-weight: 700;
             transition: 0.3s;
             border: 1px solid #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.4);
+            cursor: pointer;
+            font-family: inherit;
         }
         .glass-btn:hover {
             background: #fff;
@@ -142,12 +117,11 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
-        /* --- 追加: テキストコンテンツエリア用スタイル --- */
         .text-content-card {
             text-align: left;
             line-height: 1.8;
             opacity: 0;
-            animation: fadeInUp 1s ease-out 0.2s forwards; /* 少し遅れて表示 */
+            animation: fadeInUp 1s ease-out 0.2s forwards;
         }
         .text-content-card h2 {
             margin-top: 0;
@@ -157,9 +131,7 @@
             padding-bottom: 0.8rem;
             margin-bottom: 1.5rem;
         }
-        /* ------------------------------------------- */
 
-        /* ギャラリーグリッド設定 */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -177,84 +149,47 @@
         }
         
         .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100%; height: 100%; object-fit: cover;
             transition: transform 0.5s;
             background-color: rgba(255,255,255,0.2);
         }
         
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
+        .gallery-item:hover img { transform: scale(1.1); }
 
         .item-overlay {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: rgba(255,255,255,0.3);
             backdrop-filter: blur(4px);
-            opacity: 0;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: #333;
+            opacity: 0; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: #333;
         }
         
-        .gallery-item:hover .item-overlay {
-            opacity: 1;
-        }
+        .gallery-item:hover .item-overlay { opacity: 1; }
 
-        /* 拡大表示（モーダル） */
+        /* Modal */
         .modal-overlay {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: 0.3s;
         }
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-content {
-            width: 90%;
-            max-width: 600px;
-            background: #fff;
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transform: scale(0.9);
-            transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 90%; max-width: 600px; background: #fff; border-radius: 24px;
+            overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: scale(0.9); transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
-        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-img { width: 100%; height: auto; max-height: 70vh; object-fit: contain; background-color: #f0f0f0; display: block; }
+        .modal-body { padding: 2rem; text-align: center; }
 
-        .modal-img {
-            width: 100%;
-            height: auto;
-            max-height: 70vh;
-            object-fit: contain;
-            background-color: #f0f0f0;
-            display: block;
-        }
-        .modal-body {
-            padding: 2rem;
-            text-align: center;
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .blob { opacity: 0.5; }
+        /* Claps Particles */
+        .clap-particle {
+            position: fixed; pointer-events: none; z-index: 10000;
+            font-size: 1.5rem; transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s;
         }
     </style>
 </head>
@@ -265,16 +200,11 @@
 
     <div class="container">
         <div class="glass-card profile-card">
-            <img src="image/profile.jpg" 
-                 alt="Profile" class="profile-img"
-                 onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_1%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A10pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_1%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23cccccc%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2274%22%20y%3D%22104%22%3EProfile%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E'">
-            
+            <img src="image/profile.jpg" alt="Profile" class="profile-img" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%20preserveAspectRatio%3D%22none%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%23cccccc%22%3E%3C%2Frect%3E%3Ctext%20x%3D%2274%22%20y%3D%22104%22%20fill%3D%22white%22%3EProfile%3C%2Ftext%3E%3C%2Fsvg%3E'">
             <h1 id="user-name"></h1>
             <p id="user-role" class="role"></p>
             <p id="user-bio" style="margin-bottom: 2rem; line-height: 1.8;"></p>
-            
-            <div id="links-container" class="links-row">
-            </div>
+            <div id="links-container" class="links-row"></div>
         </div>
 
         <div id="text-content-area" class="glass-card text-content-card" style="display: none;">
@@ -282,7 +212,14 @@
             <div id="text-content-body"></div>
         </div>
 
-        <div id="gallery-grid" class="gallery-grid">
+        <div id="gallery-grid" class="gallery-grid"></div>
+
+        <div id="clap-wrapper" style="text-align:center; margin: 50px 0 20px 0;">
+            <button id="main-clap-btn" class="glass-btn" style="gap: 10px;">
+                <span>👏</span>
+                <span id="clap-num" style="min-width: 20px;">0</span>
+            </button>
+            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Feel free to clap!</p>
         </div>
     </div>
 
@@ -297,56 +234,25 @@
     </div>
 
     <script>
-        /**
-         * ==============================================
-         * 簡単設定エリア
-         * 以下の内容を書き換えるだけでサイトが完成します
-         * ==============================================
-         */
         const config = {
-                // あなたのお名前
-                name: "RUOCHEN WANG",
-            
-            // 肩書き
+            name: "RUOCHEN WANG",
             role: "Multilingual Specialist | Graphic Designer | Sales & Operations",
-            
-            // 簡単な自己紹介（プロフィールカード内）
             bio: "台湾出身、日本語（N1）・台湾語（北京語）・英語の3か国語を操るマルチリンガルです。",
-            
-            // 【NEW】追加コンテンツエリア
-            // ここにタイトルと本文を入力すると、プロフィールの下に表示されます。
-            // 不要な場合は、show: false にしてください。
             freeContent: {
-                show: true, // trueで表示、falseで非表示
+                show: true,
                 title: "About Me",
-                body: `
-                    「言葉と言葉、デザインとビジネスをつなぐ」<br>
-<br>
-                    台湾でデザインを学び、2016年に来日。京都・東京・静岡などを拠点に、「デザイン」「語学」「マネジメント」を軸としたキャリアを築いてきました。<br>
-<br>
-                    Multilingual: 日・中・英を駆使したグローバルコミュニケーション<br>
-<br>
-                    Design: UI/UX設計、グラフィック、販促ビジュアル制作<br>
-<br>
-                    Operations: 店舗管理、事務、多文化チームのマネジメント<br>
-<br>
-                    マニュアルを超えた柔軟な対応力と、常に新しい領域へ挑戦する知的好奇心が私の原動力です。これまでの経験を掛け合わせ、実務的かつクリエイティブな解決策を提案します。<br>
-<br>
-                    プライベートでは、気分転換に映画を観たり、イラストを描いたり、興味のある話題をネットで調べたりすることが好きです。仕事と趣味のバランスを大切にしながら、日々の生活を豊かにしていきたいと考えています。
-                `
+                body: `「言葉と言葉、デザインとビジネスをつなぐ」<br><br>
+                       台湾でデザインを学び、2016年に来日。京都・東京・静岡などを拠点に、「デザイン」「語学」「マネジメント」を軸としたキャリアを築いてきました。<br><br>
+                       Multilingual: 日・中・英を駆使したグローバルコミュニケーション<br>
+                       Design: UI/UX設計、グラフィック、販促ビジュアル制作<br>
+                       Operations: 店舗管理、事務、多文化チームのマネジメント<br><br>
+                       マニュアルを超えた柔軟な対応力と、常に新しい領域へ挑戦する知的好奇心が私の原動力です。`
             },
-
-            // SNSなどのリンク設定
             links: [
                 { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" },
                 { label: "Dribbble", url: "https://dribbble.com/RuocheWan/about" },
-                { label: "Email", url: "ruoches@outlook.com" } // 暫時保留完整 Email，後續透過 JS 處理
+                { label: "Email", url: "ruoches@outlook.com" }
             ],
-
-            // ギャラリーの画像設定
-            // title: 画像の上に表示されるタイトル
-            // category: 拡大時に表示されるカテゴリ名
-            // ※画像ファイルは image フォルダの中に image1.jpg, image2.jpg... と連番で保存してください
             metaData: [
                 { title: "Mobile App", category: "UI Design" },
                 { title: "Dashboard", category: "Web Design" },
@@ -357,78 +263,83 @@
             ]
         };
 
-        // 読み込む画像の最大数（増やしたい場合はこの数字を変更）
         const MAX_IMAGES = 18; 
 
-        /**
-         * ==============================================
-         * ここから下はプログラム処理です（変更不要）
-         * ==============================================
-         */
-
         document.addEventListener('DOMContentLoaded', () => {
-            // プロフィール情報の反映
+            // Setup Profile
             document.getElementById('user-name').textContent = config.name;
             document.getElementById('user-role').textContent = config.role;
             document.getElementById('user-bio').innerHTML = config.bio;
 
-            // 追加コンテンツエリアの反映処理
-            const textArea = document.getElementById('text-content-area');
+            // Setup About Me
             if (config.freeContent && config.freeContent.show) {
-                textArea.style.display = 'block';
+                document.getElementById('text-content-area').style.display = 'block';
                 document.getElementById('text-content-title').textContent = config.freeContent.title;
                 document.getElementById('text-content-body').innerHTML = config.freeContent.body;
             }
 
-            // リンクボタンの生成
+            // Setup Links
             const linksContainer = document.getElementById('links-container');
             config.links.forEach(link => {
-                let linkHtml = '';
+                const a = document.createElement('a');
+                a.className = 'glass-btn';
+                a.target = '_blank';
+                a.rel = 'noopener noreferrer';
+                a.textContent = link.label;
                 if (link.label === "Email") {
-                    // Email 連結，使用 JavaScript 隱藏並在點擊時顯示
-                    linkHtml = `<a href="#" class="glass-btn" onclick="this.href='mailto:' + atob('cnVvY2hlc0BvdXRsb29rLmNvbQ==')" target="_blank" rel="noopener noreferrer">${link.label}</a>`;
+                    a.href = '#';
+                    a.onclick = (e) => {
+                        e.preventDefault();
+                        window.location.href = 'mailto:' + link.url;
+                    };
                 } else {
-                    // 其他連結
-                    linkHtml = `<a href="${link.url}" class="glass-btn" target="_blank" rel="noopener noreferrer">${link.label}</a>`;
+                    a.href = link.url;
                 }
-                linksContainer.innerHTML += linkHtml;
+                linksContainer.appendChild(a);
             });
 
-            // ギャラリーの生成
+            // Setup Gallery
             const grid = document.getElementById('gallery-grid');
-            
-            // 1からMAX_IMAGESまでループして画像を生成
             for (let i = 1; i <= MAX_IMAGES; i++) {
-                const dataIndex = i - 1;
-                // 設定データがない場合はデフォルト値を使用
-                const meta = config.metaData[dataIndex] || { title: `Work ${i}`, category: 'Gallery' };
+                const meta = config.metaData[i-1] || { title: `Work ${i}`, category: 'Gallery' };
                 const imgPath = `image/image${i}.jpg`; 
-
                 const div = document.createElement('div');
                 div.className = 'gallery-item glass-card';
                 div.style.padding = '0';
-                div.style.marginBottom = '0';
-                
-                // 表示アニメーションを少しずつずらす処理（テキストエリアがある分、遅延を少し増やす）
-                const baseDelay = config.freeContent && config.freeContent.show ? 0.5 : 0.3;
-                div.style.animationDelay = `${baseDelay + (i * 0.1)}s`;
-
-                // 画像読み込みエラー時（ファイルがない場合）はその要素自体を非表示にする
-                div.innerHTML = `
-                    <img src="${imgPath}" 
-                         alt="${meta.title}"
-                         onerror="this.closest('.gallery-item').style.display='none'">
-                    <div class="item-overlay">
-                        <span>${meta.title}</span>
-                    </div>
-                `;
-                
+                div.style.animationDelay = `${0.5 + (i * 0.1)}s`;
+                div.innerHTML = `<img src="${imgPath}" alt="${meta.title}" onerror="this.closest('.gallery-item').style.display='none'">
+                                 <div class="item-overlay"><span>${meta.title}</span></div>`;
                 div.onclick = () => openModal(meta.title, meta.category, imgPath);
                 grid.appendChild(div);
             }
         });
 
-        // モーダル操作
+        // Claps Functionality
+        let clapCount = 0;
+        document.getElementById('main-clap-btn').addEventListener('click', function(e) {
+            clapCount++;
+            document.getElementById('clap-num').innerText = clapCount;
+
+            // Create particles
+            for(let i=0; i<8; i++) {
+                const p = document.createElement('div');
+                p.classList.add('clap-particle');
+                p.innerText = ['✨','💖','👏','🔥'][Math.floor(Math.random()*4)];
+                p.style.left = e.clientX + 'px';
+                p.style.top = e.clientY + 'px';
+                document.body.appendChild(p);
+                
+                const moveX = (Math.random() - 0.5) * 300;
+                const moveY = (Math.random() - 0.8) * 300;
+
+                requestAnimationFrame(() => {
+                    p.style.transform = `translate(${moveX}px, ${moveY}px) scale(0.2)`;
+                    p.style.opacity = '0';
+                });
+                setTimeout(() => p.remove(), 1200);
+            }
+        });
+
         const modal = document.getElementById('modal');
         function openModal(title, category, src) {
             document.getElementById('modal-img').src = src;
@@ -436,30 +347,7 @@
             document.getElementById('modal-cat').textContent = category;
             modal.classList.add('active');
         }
-        function closeModal() {
-            modal.classList.remove('active');
-        }
+        function closeModal() { modal.classList.remove('active'); }
     </script>
-<div id="clap-wrapper" style="text-align:center; margin: 20px 0;">
-    <button id="main-clap-btn" style="background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); border-radius:30px; padding:10px 20px; color:white; cursor:pointer;">
-        👏 <span id="clap-num">0</span>
-    </button>
-</div>
-
-<script>
-document.getElementById('main-clap-btn').addEventListener('click', (e) => {
-    const num = document.getElementById('clap-num');
-    num.innerText = parseInt(num.innerText) + 1;
-    for(let i=0; i<6; i++) {
-        const p = document.createElement('div');
-        p.innerText = ['✨','💖','👏'][Math.floor(Math.random()*3)];
-        p.style.cssText = `position:fixed; left:${e.clientX}px; top:${e.clientY}px; pointer-events:none; transition:2s; z-index:9999;`;
-        document.body.appendChild(p);
-        const x = (Math.random()-0.5)*200, y = (Math.random()-0.5)*200;
-        setTimeout(() => { p.style.transform = `translate(${x}px, ${y}px) scale(0)`; p.style.opacity = '0'; }, 10);
-        setTimeout(() => p.remove(), 2000);
-    }
-});
-</script>    
 </body>
 </html>
