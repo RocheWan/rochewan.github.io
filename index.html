@@ -110,6 +110,7 @@
             border: 1px solid rgba(255,255,255,0.4);
             cursor: pointer;
             font-family: inherit;
+            font-size: 1rem;
         }
         .glass-btn:hover {
             background: #fff;
@@ -167,7 +168,6 @@
         
         .gallery-item:hover .item-overlay { opacity: 1; }
 
-        /* 每張作品集的鼓掌按鈕樣式 */
         .item-clap-btn {
             position: absolute;
             bottom: 10px;
@@ -185,6 +185,7 @@
             cursor: pointer;
             transition: 0.2s;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            color: #444;
         }
         .item-clap-btn:hover {
             background: white;
@@ -228,7 +229,8 @@
             <h1 id="user-name"></h1>
             <p id="user-role" class="role"></p>
             <p id="user-bio" style="margin-bottom: 2rem; line-height: 1.8;"></p>
-            <div id="links-container" class="links-row"></div>
+            <div id="links-container" class="links-row">
+                </div>
         </div>
 
         <div id="text-content-area" class="glass-card text-content-card" style="display: none;">
@@ -238,13 +240,6 @@
 
         <div id="gallery-grid" class="gallery-grid"></div>
 
-        <div id="clap-wrapper" style="text-align:center; margin: 80px 0 20px 0;">
-            <button id="main-clap-btn" class="glass-btn" style="gap: 10px;">
-                <span>👏</span>
-                <span id="total-clap-num">0</span>
-            </button>
-            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Thank you for visiting!</p>
-        </div>
     </div>
 
     <div id="modal" class="modal-overlay" onclick="closeModal()">
@@ -302,7 +297,7 @@
                 document.getElementById('text-content-body').innerHTML = config.freeContent.body;
             }
 
-            // Setup Links
+            // Setup Links & Top Claps Button
             const linksContainer = document.getElementById('links-container');
             config.links.forEach(link => {
                 const a = document.createElement('a');
@@ -317,7 +312,16 @@
                 linksContainer.appendChild(a);
             });
 
-            // Setup Gallery (這裡加入了每張作品的鼓掌按鈕)
+            // 在 Email 後面動態插入總鼓掌按鈕
+            const topClapBtn = document.createElement('button');
+            topClapBtn.className = 'glass-btn';
+            topClapBtn.id = 'main-clap-btn';
+            topClapBtn.style.gap = '10px';
+            topClapBtn.innerHTML = `<span>👏</span><span id="total-clap-num">0</span>`;
+            topClapBtn.onclick = (e) => handleTopClap(e);
+            linksContainer.appendChild(topClapBtn);
+
+            // Setup Gallery
             const grid = document.getElementById('gallery-grid');
             for (let i = 1; i <= MAX_IMAGES; i++) {
                 const meta = config.metaData[i-1] || { title: `Work ${i}`, category: 'Gallery' };
@@ -336,7 +340,6 @@
                 `;
                 
                 div.onclick = (e) => {
-                    // 如果點擊的是鼓掌按鈕，就不觸發開啟 Modal
                     if (e.target.closest('.item-clap-btn')) return;
                     openModal(meta.title, meta.category, imgPath);
                 };
@@ -365,20 +368,20 @@
             }
         }
 
-        // 處理單個作品集的鼓掌
+        // 處理作品集鼓掌
         function handleItemClap(e, btn) {
-            e.stopPropagation(); // 阻止觸發開啟圖片
+            e.stopPropagation();
             const countSpan = btn.querySelector('span');
             countSpan.innerText = parseInt(countSpan.innerText) + 1;
             triggerClapEffect(e);
         }
 
-        // 處理最下方的大按鈕鼓掌
-        document.getElementById('main-clap-btn').addEventListener('click', function(e) {
+        // 處理頂部總鼓掌
+        function handleTopClap(e) {
             const num = document.getElementById('total-clap-num');
             num.innerText = parseInt(num.innerText) + 1;
             triggerClapEffect(e);
-        });
+        }
 
         const modal = document.getElementById('modal');
         function openModal(title, category, src) {
