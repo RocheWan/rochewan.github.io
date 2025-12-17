@@ -229,8 +229,7 @@
             <h1 id="user-name"></h1>
             <p id="user-role" class="role"></p>
             <p id="user-bio" style="margin-bottom: 2rem; line-height: 1.8;"></p>
-            <div id="links-container" class="links-row">
-                </div>
+            <div id="links-container" class="links-row"></div>
         </div>
 
         <div id="text-content-area" class="glass-card text-content-card" style="display: none;">
@@ -239,7 +238,6 @@
         </div>
 
         <div id="gallery-grid" class="gallery-grid"></div>
-
     </div>
 
     <div id="modal" class="modal-overlay" onclick="closeModal()">
@@ -285,19 +283,16 @@
         const MAX_IMAGES = 18; 
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Setup Profile
             document.getElementById('user-name').textContent = config.name;
             document.getElementById('user-role').textContent = config.role;
             document.getElementById('user-bio').innerHTML = config.bio;
 
-            // Setup About Me
             if (config.freeContent && config.freeContent.show) {
                 document.getElementById('text-content-area').style.display = 'block';
                 document.getElementById('text-content-title').textContent = config.freeContent.title;
                 document.getElementById('text-content-body').innerHTML = config.freeContent.body;
             }
 
-            // Setup Links & Top Claps Button
             const linksContainer = document.getElementById('links-container');
             config.links.forEach(link => {
                 const a = document.createElement('a');
@@ -312,16 +307,15 @@
                 linksContainer.appendChild(a);
             });
 
-            // 在 Email 後面動態插入總鼓掌按鈕
+            // 頂部大按鈕：初始只顯示圖示
             const topClapBtn = document.createElement('button');
             topClapBtn.className = 'glass-btn';
             topClapBtn.id = 'main-clap-btn';
-            topClapBtn.style.gap = '10px';
-            topClapBtn.innerHTML = `<span>👏</span><span id="total-clap-num">0</span>`;
-            topClapBtn.onclick = (e) => handleTopClap(e);
+            topClapBtn.style.gap = '8px';
+            topClapBtn.innerHTML = `<span>👏</span><span class="clap-count" style="display:none;">0</span>`;
+            topClapBtn.onclick = (e) => handleClapClick(e, topClapBtn);
             linksContainer.appendChild(topClapBtn);
 
-            // Setup Gallery
             const grid = document.getElementById('gallery-grid');
             for (let i = 1; i <= MAX_IMAGES; i++) {
                 const meta = config.metaData[i-1] || { title: `Work ${i}`, category: 'Gallery' };
@@ -334,8 +328,8 @@
                 div.innerHTML = `
                     <img src="${imgPath}" alt="${meta.title}" onerror="this.closest('.gallery-item').style.display='none'">
                     <div class="item-overlay"><span>${meta.title}</span></div>
-                    <button class="item-clap-btn" onclick="handleItemClap(event, this)">
-                        👏 <span>0</span>
+                    <button class="item-clap-btn" onclick="handleClapClick(event, this)">
+                        <span>👏</span><span class="clap-count" style="display:none;">0</span>
                     </button>
                 `;
                 
@@ -347,7 +341,21 @@
             }
         });
 
-        // 鼓掌特效共用邏輯
+        // 統一處理點擊邏輯
+        function handleClapClick(e, btn) {
+            e.stopPropagation();
+            const countSpan = btn.querySelector('.clap-count');
+            let currentCount = parseInt(countSpan.innerText);
+            
+            // 第一次按下時，顯示數字
+            if (countSpan.style.display === 'none') {
+                countSpan.style.display = 'inline';
+            }
+            
+            countSpan.innerText = currentCount + 1;
+            triggerClapEffect(e);
+        }
+
         function triggerClapEffect(e) {
             for(let i=0; i<8; i++) {
                 const p = document.createElement('div');
@@ -366,21 +374,6 @@
                 });
                 setTimeout(() => p.remove(), 1200);
             }
-        }
-
-        // 處理作品集鼓掌
-        function handleItemClap(e, btn) {
-            e.stopPropagation();
-            const countSpan = btn.querySelector('span');
-            countSpan.innerText = parseInt(countSpan.innerText) + 1;
-            triggerClapEffect(e);
-        }
-
-        // 處理頂部總鼓掌
-        function handleTopClap(e) {
-            const num = document.getElementById('total-clap-num');
-            num.innerText = parseInt(num.innerText) + 1;
-            triggerClapEffect(e);
         }
 
         const modal = document.getElementById('modal');
