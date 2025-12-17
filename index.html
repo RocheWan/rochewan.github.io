@@ -167,6 +167,30 @@
         
         .gallery-item:hover .item-overlay { opacity: 1; }
 
+        /* 每張作品集的鼓掌按鈕樣式 */
+        .item-clap-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .item-clap-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
         /* Modal */
         .modal-overlay {
             position: fixed; inset: 0;
@@ -214,12 +238,12 @@
 
         <div id="gallery-grid" class="gallery-grid"></div>
 
-        <div id="clap-wrapper" style="text-align:center; margin: 50px 0 20px 0;">
+        <div id="clap-wrapper" style="text-align:center; margin: 80px 0 20px 0;">
             <button id="main-clap-btn" class="glass-btn" style="gap: 10px;">
                 <span>👏</span>
-                <span id="clap-num" style="min-width: 20px;">0</span>
+                <span id="total-clap-num">0</span>
             </button>
-            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Feel free to clap!</p>
+            <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Thank you for visiting!</p>
         </div>
     </div>
 
@@ -246,7 +270,7 @@
                        Multilingual: 日・中・英を駆使したグローバルコミュニケーション<br>
                        Design: UI/UX設計、グラフィック、販促ビジュアル制作<br>
                        Operations: 店舗管理、事務、多文化チームのマネジメント<br><br>
-                       マニュアルを超えた柔軟な対応力と、常に新しい領域へ挑戦する知的好奇心が私の原動力です。`
+                       マニュアルを超えた柔軟な対応力と、常に新しい領域へ挑戦する知的好奇心が我的原動力。`
             },
             links: [
                 { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" },
@@ -288,17 +312,12 @@
                 a.textContent = link.label;
                 if (link.label === "Email") {
                     a.href = '#';
-                    a.onclick = (e) => {
-                        e.preventDefault();
-                        window.location.href = 'mailto:' + link.url;
-                    };
-                } else {
-                    a.href = link.url;
-                }
+                    a.onclick = (e) => { e.preventDefault(); window.location.href = 'mailto:' + link.url; };
+                } else { a.href = link.url; }
                 linksContainer.appendChild(a);
             });
 
-            // Setup Gallery
+            // Setup Gallery (這裡加入了每張作品的鼓掌按鈕)
             const grid = document.getElementById('gallery-grid');
             for (let i = 1; i <= MAX_IMAGES; i++) {
                 const meta = config.metaData[i-1] || { title: `Work ${i}`, category: 'Gallery' };
@@ -307,20 +326,26 @@
                 div.className = 'gallery-item glass-card';
                 div.style.padding = '0';
                 div.style.animationDelay = `${0.5 + (i * 0.1)}s`;
-                div.innerHTML = `<img src="${imgPath}" alt="${meta.title}" onerror="this.closest('.gallery-item').style.display='none'">
-                                 <div class="item-overlay"><span>${meta.title}</span></div>`;
-                div.onclick = () => openModal(meta.title, meta.category, imgPath);
+                
+                div.innerHTML = `
+                    <img src="${imgPath}" alt="${meta.title}" onerror="this.closest('.gallery-item').style.display='none'">
+                    <div class="item-overlay"><span>${meta.title}</span></div>
+                    <button class="item-clap-btn" onclick="handleItemClap(event, this)">
+                        👏 <span>0</span>
+                    </button>
+                `;
+                
+                div.onclick = (e) => {
+                    // 如果點擊的是鼓掌按鈕，就不觸發開啟 Modal
+                    if (e.target.closest('.item-clap-btn')) return;
+                    openModal(meta.title, meta.category, imgPath);
+                };
                 grid.appendChild(div);
             }
         });
 
-        // Claps Functionality
-        let clapCount = 0;
-        document.getElementById('main-clap-btn').addEventListener('click', function(e) {
-            clapCount++;
-            document.getElementById('clap-num').innerText = clapCount;
-
-            // Create particles
+        // 鼓掌特效共用邏輯
+        function triggerClapEffect(e) {
             for(let i=0; i<8; i++) {
                 const p = document.createElement('div');
                 p.classList.add('clap-particle');
@@ -338,6 +363,21 @@
                 });
                 setTimeout(() => p.remove(), 1200);
             }
+        }
+
+        // 處理單個作品集的鼓掌
+        function handleItemClap(e, btn) {
+            e.stopPropagation(); // 阻止觸發開啟圖片
+            const countSpan = btn.querySelector('span');
+            countSpan.innerText = parseInt(countSpan.innerText) + 1;
+            triggerClapEffect(e);
+        }
+
+        // 處理最下方的大按鈕鼓掌
+        document.getElementById('main-clap-btn').addEventListener('click', function(e) {
+            const num = document.getElementById('total-clap-num');
+            num.innerText = parseInt(num.innerText) + 1;
+            triggerClapEffect(e);
         });
 
         const modal = document.getElementById('modal');
