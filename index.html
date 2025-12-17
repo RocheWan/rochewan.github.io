@@ -247,12 +247,19 @@
 
         function initCursor() {
             const cursor = document.getElementById('custom-cursor');
+            
+            // 使用原生 CSS transform，效能最好且最靈敏
             document.addEventListener('mousemove', e => {
-                anime({ targets: cursor, left: e.clientX, top: e.clientY, duration: 100, easing: 'linear' });
+                cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
+                // 記得把 CSS 裡的 top: 0; left: 0; 保持不變
             });
+
             document.addEventListener('mouseover', e => {
-                if(e.target.closest('a, button, .gallery-item')) cursor.classList.add('hovered');
-                else cursor.classList.remove('hovered');
+                if(e.target.closest('a, button, .gallery-item, .link-anchor')) {
+                    cursor.classList.add('hovered');
+                } else {
+                    cursor.classList.remove('hovered');
+                }
             });
         }
 
