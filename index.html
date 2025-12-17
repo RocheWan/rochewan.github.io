@@ -36,16 +36,17 @@
             #custom-cursor { display: none; }
         }
 
-        /* カスタムカーソル */
+        /* --- 自訂鼠標 (硬體加速靈敏版) --- */
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: var(--cursor-size); height: var(--cursor-size);
             border: 1px solid #fff; border-radius: 50%; pointer-events: none; z-index: 9999;
-            transform: translate(-50%, -50%); mix-blend-mode: difference;
-            transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            mix-blend-mode: difference;
+            transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.3s ease;
+            will-change: transform;
         }
         #custom-cursor.hovered { width: var(--cursor-hover-size); height: var(--cursor-hover-size); background-color: #fff; }
 
-        /* ローディング */
+        /* --- Loading 畫面 --- */
         #loader {
             position: fixed; inset: 0; background-color: #111; z-index: 10000;
             display: flex; justify-content: center; align-items: center; color: #fff;
@@ -56,7 +57,7 @@
         @media (min-width: 768px) { .container-padding { padding-left: var(--spacing-container-md); padding-right: var(--spacing-container-md); } }
         .section-py { padding-top: 8rem; padding-bottom: 8rem; }
 
-        /* ヘッダー */
+        /* --- Header 區塊 --- */
         .header-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
         .parallax-bg {
             position: absolute; right: -5%; top: 10%; font-weight: 800; color: #e5e7eb;
@@ -64,7 +65,7 @@
             line-height: 0.8; font-size: 15vw; will-change: transform;
         }
         .header-content { position: relative; z-index: 10; max-width: 1024px; }
-        .user-role { font-size: 0.75rem; margin-bottom: 2rem; letter-spacing: 0.4em; text-transform: uppercase; color: #6b7280; }
+        .user-role { font-size: 0.75rem; margin-bottom: 2rem; letter-spacing: 0.4em; text-transform: uppercase; color: #6b7280; font-weight: 500; }
         .user-name { font-size: clamp(3rem, 10vw, 8rem); font-weight: 800; letter-spacing: -0.05em; margin-bottom: 3rem; line-height: 1.1; }
         .separator-line { width: 6rem; height: 2px; background-color: #000; margin-bottom: 3rem; transform: scaleX(0); transform-origin: left; }
         .user-bio { font-size: 1.1rem; line-height: 2; font-weight: 500; color: #374151; max-width: 36rem; }
@@ -72,7 +73,17 @@
         .reveal-text { overflow: hidden; display: inline-block; vertical-align: bottom; }
         .reveal-text span { display: block; transform: translateY(100%); opacity: 0; }
 
-        /* ギャラリー */
+        /* --- Scroll 指示器 --- */
+        .scroll-indicator {
+            position: absolute; bottom: 2rem; left: var(--spacing-container);
+            display: flex; align-items: center; gap: 1rem; z-index: 10; opacity: 0;
+        }
+        @media (min-width: 768px) { .scroll-indicator { left: var(--spacing-container-md); } }
+        .scroll-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; }
+        .scroll-line { width: 1px; height: 40px; background-color: #000; }
+        @keyframes bounce-slow { 0%, 100% { transform: translateY(-25%); } 50% { transform: translateY(0); } }
+
+        /* --- 作品網格 --- */
         .gallery-section { background-color: #fff; z-index: 20; position: relative; }
         .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1.5rem; }
         .section-title { font-size: 2.5rem; font-weight: 700; }
@@ -81,12 +92,12 @@
         @media (min-width: 768px) { #gallery-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { #gallery-grid { grid-template-columns: repeat(3, 1fr); } }
 
-        .gallery-item { position: relative; aspect-ratio: 1; overflow: hidden; background-color: #eee; opacity: 0; transform: translateY(30px); }
+        .gallery-item { position: relative; aspect-ratio: 1; overflow: hidden; background-color: #eee; opacity: 0; transform: translateY(30px); transition: 0.8s; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
         .gallery-item:hover img { transform: scale(1.05); }
         .gallery-item.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* 特殊：拍手按鈕樣式 */
+        /* 拍手按鈕與粒子 */
         .item-clap-btn {
             position: absolute; bottom: 15px; right: 15px; z-index: 30;
             background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);
@@ -95,12 +106,12 @@
         }
         .clap-particle { position: fixed; pointer-events: none; z-index: 20000; font-size: 1.5rem; }
 
-        /* モーダル */
+        /* --- Modal 放大視窗 --- */
         #image-modal { position: fixed; inset: 0; z-index: 15000; display: none; align-items: center; justify-content: center; background: rgba(255,255,255,0.98); opacity: 0; }
         #modal-image { max-width: 90%; max-height: 80%; object-fit: contain; opacity: 0; transform: scale(0.95); }
-        .close-btn { position: fixed; top: 2rem; right: 2rem; z-index: 20000; width: 48px; height: 48px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .close-btn { position: fixed; top: 2rem; right: 2rem; z-index: 20000; width: 48px; height: 48px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: none; }
 
-        /* フッター */
+        /* --- Footer 區塊 --- */
         .contact-section { background-color: var(--bg-footer); color: #fff; }
         .link-anchor { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 1.5rem 0; font-size: 1.5rem; transition: 0.3s; }
         .link-anchor:hover { padding-left: 1rem; color: #ccc; }
@@ -115,19 +126,23 @@
     </div>
 
     <header class="header-section container-padding">
-        <div class="parallax-bg">RUO<br>CHEN</div>
+        <div class="parallax-bg" id="parallax-text">RUO<br>CHEN</div>
         <div class="header-content">
             <p id="user-role" class="user-role"></p>
             <h1 id="user-name" class="user-name"></h1>
             <div class="separator-line line-anim"></div>
             <p id="user-bio" class="user-bio"></p>
         </div>
+        <div class="scroll-indicator">
+            <span class="scroll-text">Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
     </header>
 
     <section class="gallery-section section-py container-padding">
         <div class="section-header">
             <h2 class="section-title">Works</h2>
-            <span style="font-size: 10px; letter-spacing: 0.2em; color:#999;">SCROLL TO EXPLORE</span>
+            <span style="font-size: 10px; letter-spacing: 0.2em; color:#999;">SELECTED PROJECTS</span>
         </div>
         <div id="gallery-grid"></div>
     </section>
@@ -152,7 +167,9 @@
         <div class="close-btn" onclick="closeModal()">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </div>
-        <img id="modal-image" src="">
+        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;" onclick="closeModal()">
+            <img id="modal-image" src="" onclick="event.stopPropagation()">
+        </div>
     </div>
 
     <script>
@@ -160,12 +177,11 @@
             name: "RUOCHEN WANG",
             role: "Multilingual Specialist / Graphic Designer / Sales & Operations",
             bio: "台湾出身、日本語（N1）・台湾語（北京語）・英語の3か国語を操るマルチリンガルです。",
-            freeTextTitle: "Philosophy",
-            freeTextBody: "「言葉と言葉、デザインとビジネスをつなぐ」\n台湾でデザインを学び、2016年に来日。京都・東京・静岡などを拠点に、「デザイン」「語學」「マネジメント」を軸としたキャリアを築いてきました。",
+            freeTextTitle: "About Me",
+            freeTextBody: "「言葉と言葉、デザインとビジネスをつなぐ」\n台湾でデザインを学び、2016年に來日。京都・東京・静岡などを拠点に、「デザイン」「語學」「マネジメント」を軸としたキャリアを築いてきました。",
             maxImages: 18,
-            // 拍手自定義圖示
             metaData: [
-                { icon: "📱" }, { icon: "💻" }, { icon: "🎨" }, { icon: "📸" }, { icon: "✨" }
+                { icon: "🎨" }, { icon: "📱" }, { icon: "💻" }, { icon: "📸" }, { icon: "✨" }
             ],
             links: [
                 { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" },
@@ -175,7 +191,7 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            // 基礎資料注入
+            // 資料初始化
             const nameEl = document.getElementById('user-name');
             nameEl.innerHTML = config.name.split(' ').map(w => `<span class="reveal-text"><span>${w}</span></span>`).join('<br>');
             document.getElementById('user-role').innerHTML = `<span class="reveal-text"><span>${config.role}</span></span>`;
@@ -191,8 +207,10 @@
 
             setupGallery();
             initCursor();
+            initParallax();
         });
 
+        // 圖片生成與滾動監測
         function setupGallery() {
             const grid = document.getElementById('gallery-grid');
             for (let i = 1; i <= config.maxImages; i++) {
@@ -212,6 +230,7 @@
             startAnim();
         }
 
+        // 拍手特效
         function handleClap(e, btn, icon) {
             e.stopPropagation();
             const count = btn.querySelector('.count');
@@ -232,12 +251,22 @@
             }
         }
 
+        // 進場動畫
         function startAnim() {
             const tl = anime.timeline({ easing: 'easeOutExpo' });
             tl.add({ targets: '.loader-text', translateY: [20, 0], opacity: [0, 1], duration: 800 })
               .add({ targets: '#loader', translateY: '-100%', duration: 1000, easing: 'easeInOutExpo', delay: 800 })
               .add({ targets: '.reveal-text span', translateY: ['100%', '0%'], opacity: [0, 1], duration: 1000, delay: anime.stagger(100) }, '-=600')
-              .add({ targets: '.line-anim', scaleX: [0, 1], duration: 800 }, '-=800');
+              .add({ targets: '.line-anim', scaleX: [0, 1], duration: 800 }, '-=800')
+              .add({ 
+                  targets: '.scroll-indicator', 
+                  opacity: [0, 0.6], 
+                  translateY: [20, 0], 
+                  duration: 800,
+                  complete: () => {
+                      document.querySelector('.scroll-indicator').style.animation = "bounce-slow 2s infinite ease-in-out";
+                  }
+              }, '-=400');
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(en => { if(en.isIntersecting) en.target.classList.add('is-visible'); });
@@ -245,24 +274,27 @@
             document.querySelectorAll('.gallery-item').forEach(el => observer.observe(el));
         }
 
+        // 鼠標邏輯 (最靈敏的原生版)
         function initCursor() {
             const cursor = document.getElementById('custom-cursor');
-            
-            // 使用原生 CSS transform，效能最好且最靈敏
             document.addEventListener('mousemove', e => {
                 cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`;
-                // 記得把 CSS 裡的 top: 0; left: 0; 保持不變
             });
-
             document.addEventListener('mouseover', e => {
-                if(e.target.closest('a, button, .gallery-item, .link-anchor')) {
-                    cursor.classList.add('hovered');
-                } else {
-                    cursor.classList.remove('hovered');
-                }
+                if(e.target.closest('a, button, .gallery-item')) cursor.classList.add('hovered');
+                else cursor.classList.remove('hovered');
             });
         }
 
+        // 背景滾動視差
+        function initParallax() {
+            const p = document.getElementById('parallax-text');
+            window.addEventListener('scroll', () => {
+                p.style.transform = `translateY(${window.pageYOffset * 0.3}px)`;
+            });
+        }
+
+        // Modal 邏輯
         function openModal(src) {
             const m = document.getElementById('image-modal');
             const mi = document.getElementById('modal-image');
@@ -271,7 +303,6 @@
             anime({ targets: mi, scale: [0.95, 1], opacity: [0, 1], duration: 600 });
             document.body.style.overflow = 'hidden';
         }
-
         function closeModal() {
             const m = document.getElementById('image-modal');
             anime({ targets: m, opacity: 0, duration: 400, complete: () => m.style.display = 'none' });
