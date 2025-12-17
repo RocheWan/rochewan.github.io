@@ -10,8 +10,8 @@
 
     <style>
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.2);
-            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.5);
             --text-main: #444;
         }
 
@@ -19,9 +19,9 @@
         #loader {
             position: fixed; inset: 0; background: #e0e5ec;
             display: flex; align-items: center; justify-content: center;
-            z-index: 9999; transition: opacity 0.8s ease;
+            z-index: 9999;
         }
-        .loader-text { font-weight: 300; letter-spacing: 0.2em; animation: pulse 1.5s infinite; }
+        .loader-text { font-weight: 300; letter-spacing: 0.2em; animation: pulse 1.5s infinite; color: #8e9eab; }
         @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 
         /* 2. 自訂鼠標 */
@@ -29,90 +29,155 @@
             width: 20px; height: 20px; border: 2px solid #8e9eab;
             border-radius: 50%; position: fixed; pointer-events: none;
             z-index: 10000; transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
+            transition: width 0.3s, height 0.3s, background 0.3s, border 0.3s;
         }
 
         body {
-            font-family: 'Quicksand', sans-serif; margin: 0; background: #e0e5ec;
-            color: var(--text-main); cursor: none; /* 隱藏原生滑鼠 */
+            font-family: 'Quicksand', 'M PLUS Rounded 1c', sans-serif;
+            margin: 0; background: #e0e5ec; color: var(--text-main);
+            cursor: none; overflow-x: hidden;
         }
 
-        /* 標題動畫初始狀態 */
-        .reveal-text { opacity: 0; transform: translateY(20px); }
+        /* 標題與卡片進場初始狀態 */
+        .reveal-node { opacity: 0; transform: translateY(30px); }
 
         .blob { position: fixed; border-radius: 50%; filter: blur(60px); z-index: -1; }
-        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #ffafbd; }
-        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #2193b0; }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #ffafbd; opacity: 0.6; }
+        .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #2193b0; opacity: 0.4; }
 
-        .container { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; }
+        .container { max-width: 900px; margin: 0 auto; padding: 4rem 2rem; position: relative; }
+        
         .glass-card {
             background: var(--glass-bg); backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border); border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05);
             padding: 2rem; margin-bottom: 2rem;
         }
 
         .profile-card { text-align: center; padding: 4rem 2rem; }
-        .profile-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 1.5rem; }
+        .profile-img { 
+            width: 120px; height: 120px; border-radius: 50%; 
+            object-fit: cover; border: 4px solid #fff; margin-bottom: 1.5rem; 
+        }
         
-        .links-row { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+        .links-row { display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; margin-top: 1.5rem; }
         .glass-btn {
             background: rgba(255, 255, 255, 0.4); padding: 0.8rem 1.5rem; border-radius: 50px;
             text-decoration: none; color: #555; font-weight: 700; transition: 0.3s;
             border: 1px solid #fff; display: inline-flex; align-items: center; gap: 8px;
-            cursor: none; /* 確保按鈕上也使用自訂鼠標 */
+            cursor: none; font-family: inherit;
         }
         .glass-btn:hover { background: #fff; transform: translateY(-2px); }
 
+        /* 作品集網格 */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-        .gallery-item { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 1; opacity: 0; }
+        .gallery-item { 
+            border-radius: 16px; overflow: hidden; position: relative; 
+            aspect-ratio: 1; opacity: 0; cursor: none;
+        }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .gallery-item:hover img { transform: scale(1.1); }
+        
+        .item-overlay {
+            position: absolute; inset: 0; background: rgba(255,255,255,0.3);
+            backdrop-filter: blur(4px); opacity: 0; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: #333;
+        }
+        .gallery-item:hover .item-overlay { opacity: 1; }
 
         .item-clap-btn {
             position: absolute; bottom: 10px; right: 10px; z-index: 10;
             background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 20px;
             padding: 4px 10px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px;
+            cursor: none;
         }
 
-        /* 粒子特效樣式 */
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px); z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: 0.3s;
+        }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-content {
+            width: 90%; max-width: 600px; background: #fff; border-radius: 24px;
+            overflow: hidden; transform: scale(0.9); transition: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .modal-overlay.active .modal-content { transform: scale(1); }
+        .modal-img { width: 100%; max-height: 70vh; object-fit: contain; display: block; background: #f0f0f0; }
+
         .clap-particle { position: fixed; pointer-events: none; z-index: 10000; font-size: 1.5rem; }
     </style>
 </head>
 <body>
 
-    <div id="loader"><div class="loader-text">LOADING...</div></div>
-
+    <div id="loader"><div class="loader-text">DESIGNING...</div></div>
     <div id="cursor"></div>
 
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
 
     <div class="container">
-        <div class="glass-card profile-card">
-            <img src="image/profile.jpg" class="profile-img" alt="Profile">
-            <h1 id="user-name" class="reveal-text"></h1>
-            <p id="user-role" class="reveal-text" style="color:#666;"></p>
-            <div id="links-container" class="links-row reveal-text" style="margin-top:20px;"></div>
+        <div class="glass-card profile-card reveal-node">
+            <img src="image/profile.jpg" class="profile-img" alt="Profile" onerror="this.src='https://via.placeholder.com/150'">
+            <h1 id="user-name"></h1>
+            <p id="user-role" style="font-weight: 500; color: #666; letter-spacing: 0.05em;"></p>
+            <p id="user-bio" style="line-height: 1.8; margin-top: 1rem;"></p>
+            <div id="links-container" class="links-row"></div>
+        </div>
+
+        <div id="text-content-area" class="glass-card reveal-node" style="display: none;">
+            <h2 id="text-content-title" style="border-bottom: 1px solid rgba(255,255,255,0.6); padding-bottom: 0.8rem;"></h2>
+            <div id="text-content-body" style="line-height: 1.8;"></div>
         </div>
 
         <div id="gallery-grid" class="gallery-grid"></div>
     </div>
 
+    <div id="modal" class="modal-overlay" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <img id="modal-img" src="" class="modal-img" onclick="closeModal()" style="cursor: none;">
+            <div style="padding: 2rem; text-align: center;">
+                <h2 id="modal-title" style="margin: 0;"></h2>
+                <p id="modal-cat" style="color: #888; margin-top: 5px;"></p>
+            </div>
+        </div>
+    </div>
+
     <script>
         const config = {
             name: "RUOCHEN WANG",
-            role: "Multilingual Specialist | Graphic Designer",
+            role: "Multilingual Specialist | Graphic Designer | Sales & Operations",
+            bio: "台湾出身、日本語（N1）・台湾語（北京語）・英語の3か国語を操るマルチリンガルです。",
+            freeContent: {
+                show: true,
+                title: "About Me",
+                body: `「言葉と言葉、デザインとビジネスをつなぐ」<br><br>
+                       台湾でデザインを学び、2016年に来日。京都・東京・静岡などを拠点に、「デザイン」「語学」「マネジメント」を軸としたキャリアを築いてきました。<br><br>
+                       Multilingual: 日・中・英を駆使したグローバルコミュニケーション<br>
+                       Design: UI/UX設計、グラフィック、販促ビジュアル制作<br>
+                       Operations: 店舗管理、事務、多文化チームのマネジメント`
+            },
             links: [
-                { label: "LinkedIn", url: "#" },
-                { label: "Email", url: "mailto:ruoches@outlook.com" }
+                { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" },
+                { label: "Dribbble", url: "https://dribbble.com/RuocheWan/about" },
+                { label: "Email", url: "ruoches@outlook.com" }
             ],
             metaData: [
-                { title: "Mobile App", icon: "📱" },
-                { title: "Dashboard", icon: "💻" },
-                { title: "Photography", icon: "📸" }
+                { title: "Mobile App", category: "UI Design", icon: "📱" },
+                { title: "Dashboard", category: "Web Design", icon: "💻" },
+                { title: "Icon Set", category: "Graphics", icon: "🎨" },
+                { title: "Brand Identity", category: "Branding", icon: "✨" },
+                { title: "Photography", category: "Hobby", icon: "📸" },
+                { title: "Travel Log", category: "Blog", icon: "✈️" }
             ]
         };
+
+        const MAX_IMAGES = 18;
 
         // 鼠標移動邏輯
         const cursor = document.getElementById('cursor');
@@ -120,59 +185,78 @@
             gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
         });
 
-        // 鼠標碰到按鈕變大
+        // 鼠標交互
         document.addEventListener('mouseover', (e) => {
-            if (e.target.closest('.glass-btn, .gallery-item')) {
+            if (e.target.closest('.glass-btn, .gallery-item, .item-clap-btn, .modal-img')) {
                 gsap.to(cursor, { scale: 3, background: 'rgba(142,158,171,0.2)', border: 'none' });
             }
         });
         document.addEventListener('mouseout', (e) => {
-            if (e.target.closest('.glass-btn, .gallery-item')) {
+            if (e.target.closest('.glass-btn, .gallery-item, .item-clap-btn, .modal-img')) {
                 gsap.to(cursor, { scale: 1, background: 'none', border: '2px solid #8e9eab' });
             }
         });
 
         document.addEventListener('DOMContentLoaded', () => {
+            // 填充資料
             document.getElementById('user-name').textContent = config.name;
             document.getElementById('user-role').textContent = config.role;
+            document.getElementById('user-bio').innerHTML = config.bio;
+
+            if (config.freeContent.show) {
+                const area = document.getElementById('text-content-area');
+                area.style.display = 'block';
+                document.getElementById('text-content-title').textContent = config.freeContent.title;
+                document.getElementById('text-content-body').innerHTML = config.freeContent.body;
+            }
 
             const linksContainer = document.getElementById('links-container');
             config.links.forEach(link => {
                 const a = document.createElement('a');
                 a.className = 'glass-btn';
-                a.href = link.url;
                 a.textContent = link.label;
+                if (link.label === "Email") {
+                    a.href = "mailto:" + link.url;
+                } else {
+                    a.href = link.url;
+                    a.target = "_blank";
+                }
                 linksContainer.appendChild(a);
             });
 
-            // 頂部 Claps 按鈕
+            // 頂部 Claps
             const topClap = document.createElement('button');
             topClap.className = 'glass-btn';
-            topClap.innerHTML = `<span>👏</span><span class="count" style="display:none">0</span>`;
+            topClap.innerHTML = `<span>👏</span><span class="count" style="display:none; margin-left:5px;">0</span>`;
             topClap.onclick = (e) => handleClap(e, topClap, "👏");
             linksContainer.appendChild(topClap);
 
+            // 生成作品集
             const grid = document.getElementById('gallery-grid');
-            for (let i = 1; i <= 12; i++) {
-                const meta = config.metaData[i-1] || { title: `Work ${i}`, icon: '👏' };
+            for (let i = 1; i <= MAX_IMAGES; i++) {
+                const meta = config.metaData[i-1] || { title: `Work ${i}`, category: 'Design', icon: '👏' };
+                const imgPath = `image/image${i}.jpg`;
                 const div = document.createElement('div');
-                div.className = 'gallery-item glass-card';
+                div.className = 'gallery-item glass-card reveal-node';
                 div.style.padding = '0';
                 div.innerHTML = `
-                    <img src="image/image${i}.jpg">
-                    <button class="item-clap-btn" onclick="handleClap(event, this, '${meta.icon}')">
-                        <span>${meta.icon}</span><span class="count" style="display:none">0</span>
+                    <img src="${imgPath}" onerror="this.closest('.gallery-item').style.display='none'">
+                    <div class="item-overlay"><span>${meta.title}</span></div>
+                    <button class="item-clap-btn" onclick="handleClap(event, this, '${meta.icon || '👏'}')">
+                        <span>${meta.icon || '👏'}</span><span class="count" style="display:none; margin-left:5px;">0</span>
                     </button>
                 `;
+                div.onclick = (e) => {
+                    if (!e.target.closest('.item-clap-btn')) openModal(meta.title, meta.category, imgPath);
+                };
                 grid.appendChild(div);
             }
 
-            // 頁面加載動畫
+            // 進場動畫
             window.onload = () => {
                 const tl = gsap.timeline();
-                tl.to("#loader", { opacity: 0, duration: 1, onComplete: () => document.getElementById('loader').remove() })
-                  .to(".reveal-text", { opacity: 1, translateY: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" })
-                  .to(".gallery-item", { opacity: 1, duration: 0.5, stagger: 0.1 }, "-=0.5");
+                tl.to("#loader", { opacity: 0, duration: 0.8, onComplete: () => document.getElementById('loader').remove() })
+                  .to(".reveal-node", { opacity: 1, translateY: 0, duration: 1, stagger: 0.2, ease: "power2.out" });
             };
         });
 
@@ -186,15 +270,24 @@
                 const p = document.createElement('div');
                 p.className = 'clap-particle';
                 p.innerText = Math.random() > 0.5 ? icon : '✨';
-                p.style.left = e.clientX + 'px';
-                p.style.top = e.clientY + 'px';
+                p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
                 document.body.appendChild(p);
                 gsap.to(p, { 
                     x: (Math.random()-0.5)*200, y: (Math.random()-0.5)*200, 
-                    opacity: 0, scale: 0, duration: 1, onComplete: () => p.remove() 
+                    opacity: 0, scale: 0, duration: 1.2, onComplete: () => p.remove() 
                 });
             }
         }
+
+        const modal = document.getElementById('modal');
+        function openModal(title, cat, src) {
+            document.getElementById('modal-img').src = src;
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-cat').textContent = cat;
+            modal.classList.add('active');
+            gsap.to(cursor, { scale: 1, background: 'none', border: '2px solid #8e9eab' }); // 重置鼠標
+        }
+        function closeModal() { modal.classList.remove('active'); }
     </script>
 </body>
 </html>
