@@ -338,10 +338,8 @@
 
             // SNSなどのリンク設定
             links: [
-                { label: "Instagram", url: "#" },
-                { label: "X (Twitter)", url: "#" },
-                { label: "Behance", url: "#" },
-                { label: "Email", url: "mailto:hello@example.com" }
+                { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" },
+                { label: "Email", url: "ruoches@outlook.com" } // 暫時保留完整 Email，後續透過 JS 處理
             ],
 
             // ギャラリーの画像設定
@@ -384,8 +382,15 @@
             // リンクボタンの生成
             const linksContainer = document.getElementById('links-container');
             config.links.forEach(link => {
-                // 変更点: target="_blank" と rel="noopener noreferrer" を追加
-                linksContainer.innerHTML += `<a href="${link.url}" class="glass-btn" target="_blank" rel="noopener noreferrer">${link.label}</a>`;
+                let linkHtml = '';
+                if (link.label === "Email") {
+                    // Email 連結，使用 JavaScript 隱藏並在點擊時顯示
+                    linkHtml = `<a href="#" class="glass-btn" onclick="this.href='mailto:' + atob('cnVvY2hlc0BvdXRsb29rLmNvbQ==')" target="_blank" rel="noopener noreferrer">${link.label}</a>`;
+                } else {
+                    // 其他連結
+                    linkHtml = `<a href="${link.url}" class="glass-btn" target="_blank" rel="noopener noreferrer">${link.label}</a>`;
+                }
+                linksContainer.innerHTML += linkHtml;
             });
 
             // ギャラリーの生成
