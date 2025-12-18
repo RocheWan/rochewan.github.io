@@ -13,7 +13,6 @@
             --cursor-size: 20px;
             --cursor-hover-size: 60px;
             --text-main: #111;
-            --text-sub: #555;
             --bg-body: #f8f8f8;
             --bg-footer: #0a0a0a;
             --font-main: 'Montserrat', 'Noto Sans JP', sans-serif;
@@ -36,10 +35,11 @@
             #custom-cursor { display: none; }
         }
 
-        /* --- 自訂鼠標 (極速響應) --- */
+        /* --- 自訂鼠標 (修正層級) --- */
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: var(--cursor-size); height: var(--cursor-size);
-            border: 1px solid #fff; border-radius: 50%; pointer-events: none; z-index: 9999;
+            border: 1px solid #fff; border-radius: 50%; pointer-events: none; 
+            z-index: 20001; /* 確保在 Modal 之上 */
             mix-blend-mode: difference;
             transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
             will-change: transform;
@@ -71,19 +71,17 @@
         .reveal-text { overflow: hidden; display: inline-block; vertical-align: bottom; }
         .reveal-text span { display: block; transform: translateY(100%); opacity: 0; }
 
-        /* --- Scroll 指示器 --- */
         .scroll-indicator { position: absolute; bottom: 2rem; left: var(--spacing-container); display: flex; align-items: center; gap: 1rem; z-index: 10; opacity: 0; }
         @media (min-width: 768px) { .scroll-indicator { left: var(--spacing-container-md); } }
         .scroll-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; }
         .scroll-line { width: 1px; height: 40px; background-color: #000; }
         @keyframes bounce-slow { 0%, 100% { transform: translateY(-25%); } 50% { transform: translateY(0); } }
 
-        /* --- 章節標題 --- */
+        /* --- Gallery --- */
         .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1.5rem; }
         .section-title { font-size: 2.5rem; font-weight: 700; }
         .section-number { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9ca3af; margin-bottom: 0.5rem; }
 
-        /* --- 作品集 + 優化後的 VIEW --- */
         #gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 768px) { #gallery-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { #gallery-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -92,37 +90,37 @@
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
         .gallery-item.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* 移除 Blur，改用單純的透明度變化，效能最佳 */
-        .gallery-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.4);
-            opacity: 0; transition: opacity 0.3s ease;
-        }
+        .gallery-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); opacity: 0; transition: 0.3s; }
         .gallery-item:hover .gallery-overlay { opacity: 1; }
-        
-        .gallery-caption {
-            position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: 0.3s ease;
-        }
+        .gallery-caption { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .gallery-item:hover .gallery-caption { opacity: 1; }
-        
-        /* 純白細線邊框，不使用磨砂濾鏡 */
-        .view-btn {
-            color: #fff; font-size: 0.7rem; letter-spacing: 0.4em; font-weight: 400;
-            border: 1px solid rgba(255, 255, 255, 0.8); padding: 0.8rem 1.6rem;
-            background: rgba(255, 255, 255, 0.1); 
-        }
+        .view-btn { color: #fff; font-size: 0.7rem; letter-spacing: 0.4em; border: 1px solid rgba(255, 255, 255, 0.8); padding: 0.8rem 1.6rem; background: rgba(255,255,255,0.1); }
 
         .item-clap-btn {
             position: absolute; bottom: 15px; right: 15px; z-index: 30;
             background: rgba(255,255,255,0.9); border: none; border-radius: 20px; 
             padding: 5px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: none;
         }
-        .clap-particle { position: fixed; pointer-events: none; z-index: 20000; font-size: 1.5rem; }
 
-        /* --- Modal --- */
-        #image-modal { position: fixed; inset: 0; z-index: 15000; display: none; align-items: center; justify-content: center; background: rgba(255,255,255,0.98); opacity: 0; }
+        /* --- Modal (修正關閉按鈕特效) --- */
+        #image-modal { 
+            position: fixed; inset: 0; z-index: 15000; display: none; 
+            align-items: center; justify-content: center; 
+            background: rgba(255,255,255,0.98); opacity: 0; 
+        }
         #modal-image { max-width: 90%; max-height: 80%; object-fit: contain; opacity: 0; transform: scale(0.95); }
-        .close-btn { position: fixed; top: 2rem; right: 2rem; z-index: 20000; width: 48px; height: 48px; background: #fff; border-radius: 50%; display: flex; justify-content: center; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: none; }
+        
+        .close-btn { 
+            position: fixed; top: 2rem; right: 2rem; z-index: 20000; 
+            width: 50px; height: 50px; background: #000; border-radius: 50%; 
+            display: flex; justify-content: center; align-items: center; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            cursor: none; 
+        }
+        .close-btn svg { stroke: #fff; transition: all 0.4s; }
+        /* 關閉按鈕 Hover 特效 */
+        .close-btn:hover { background: #fff; transform: scale(0.9); }
+        .close-btn:hover svg { stroke: #000; transform: rotate(90deg); }
 
         /* --- Footer --- */
         .contact-section { background-color: var(--bg-footer); color: #fff; }
@@ -180,11 +178,11 @@
         </div>
     </footer>
 
-    <div id="image-modal">
-        <div class="close-btn" onclick="closeModal()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    <div id="image-modal" onclick="closeModal()">
+        <div class="close-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
         </div>
-        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;" onclick="closeModal()">
+        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
             <img id="modal-image" src="" onclick="event.stopPropagation()">
         </div>
     </div>
@@ -248,11 +246,9 @@
             e.stopPropagation();
             const count = btn.querySelector('.count');
             count.style.display = 'inline'; count.innerText = parseInt(count.innerText) + 1;
-            for(let i=0; i<6; i++) {
-                const p = document.createElement('div'); p.className = 'clap-particle'; p.innerText = Math.random() > 0.5 ? icon : '✨';
-                p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px'; document.body.appendChild(p);
-                anime({ targets: p, translateX: (Math.random()-0.5)*200, translateY: (Math.random()-0.5)*200, opacity: [1, 0], scale: [1, 0], duration: 1500, easing: 'easeOutExpo', complete: () => p.remove() });
-            }
+            const p = document.createElement('div'); p.className = 'clap-particle'; p.innerText = icon;
+            p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px'; document.body.appendChild(p);
+            anime({ targets: p, translateX: (Math.random()-0.5)*200, translateY: (Math.random()-0.5)*200, opacity: [1, 0], scale: [1, 0], duration: 1500, easing: 'easeOutExpo', complete: () => p.remove() });
         }
 
         function startAnim() {
@@ -261,7 +257,7 @@
               .add({ targets: '#loader', translateY: '-100%', duration: 1000, easing: 'easeInOutExpo', delay: 800 })
               .add({ targets: '.reveal-text span', translateY: ['100%', '0%'], opacity: [0, 1], duration: 1000, delay: anime.stagger(100) }, '-=600')
               .add({ targets: '.line-anim', scaleX: [0, 1], duration: 800 }, '-=800')
-              .add({ targets: '.scroll-indicator', opacity: [0, 0.6], translateY: [20, 0], duration: 800, complete: () => { document.querySelector('.scroll-indicator').style.animation = "bounce-slow 2s infinite ease-in-out"; } }, '-=400');
+              .add({ targets: '.scroll-indicator', opacity: [0, 0.6], translateY: [20, 0], duration: 800 });
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(en => { if(en.isIntersecting) en.target.classList.add('is-visible'); });
@@ -275,7 +271,7 @@
                 cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`; 
             });
             document.addEventListener('mouseover', e => { 
-                if(e.target.closest('a, button, .gallery-item')) cursor.classList.add('hovered'); 
+                if(e.target.closest('a, button, .gallery-item, .close-btn')) cursor.classList.add('hovered'); 
                 else cursor.classList.remove('hovered'); 
             });
         }
