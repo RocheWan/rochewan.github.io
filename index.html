@@ -24,14 +24,14 @@
         body {
             font-family: var(--font-main); background-color: var(--bg-body);
             color: var(--text-main); -webkit-font-smoothing: antialiased;
-            overflow-x: hidden; width: 100%; cursor: none; overscroll-behavior-y: none;
+            overflow-x: hidden; width: 100%; cursor: none;
         }
         
         /* --- 自訂鼠標 --- */
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: var(--cursor-size); height: var(--cursor-size);
             border: 1px solid #fff; border-radius: 50%; pointer-events: none; 
-            z-index: 30001; mix-blend-mode: difference;
+            z-index: 99999; mix-blend-mode: difference;
             transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
         }
         #custom-cursor.hovered { width: var(--cursor-hover-size); height: var(--cursor-hover-size); background-color: #fff; }
@@ -41,7 +41,7 @@
             position: fixed; inset: 0; background-color: #111; z-index: 10000;
             display: flex; justify-content: center; align-items: center; color: #fff;
         }
-        .loader-text { font-size: 1.5rem; font-weight: 300; letter-spacing: 0.3em; transform: translateY(100%); opacity: 0; }
+        .loader-text { font-size: 1.5rem; font-weight: 300; letter-spacing: 0.3em; opacity: 0; }
 
         /* --- Layout --- */
         .container-padding { padding-left: var(--spacing-container); padding-right: var(--spacing-container); }
@@ -49,19 +49,19 @@
         .section-py { padding-top: 8rem; padding-bottom: 8rem; }
 
         /* --- Header --- */
-        .header-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden; }
+        .header-section { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; position: relative; padding-top: 4rem; padding-bottom: 4rem; }
         .parallax-bg {
             position: absolute; right: -5%; top: 10%; font-weight: 800; color: #e5e7eb;
             opacity: 0.3; mix-blend-mode: multiply; pointer-events: none; z-index: 0;
             line-height: 0.8; font-size: 15vw; will-change: transform;
         }
-        .user-name { font-size: clamp(3rem, 10vw, 8rem); font-weight: 800; letter-spacing: -0.05em; margin-bottom: 3rem; line-height: 1.1; }
+        .user-name { font-size: clamp(3rem, 10vw, 8rem); font-weight: 800; letter-spacing: -0.05em; margin-bottom: 2rem; line-height: 1.1; }
         .reveal-text { overflow: hidden; display: inline-block; vertical-align: bottom; }
         .reveal-text span { display: block; transform: translateY(100%); opacity: 0; }
 
         /* --- Gallery --- */
         .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1.5rem; }
-        #gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        #gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; width: 100%; }
         @media (min-width: 768px) { #gallery-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { #gallery-grid { grid-template-columns: repeat(3, 1fr); } }
         
@@ -81,12 +81,7 @@
             padding: 6px 14px; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; cursor: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s ease;
         }
-        .item-clap-btn:active { transform: scale(0.9); }
-        /* 粒子特效樣式 */
-        .clap-particle { 
-            position: fixed; pointer-events: none; z-index: 30000; 
-            font-size: 1.5rem; user-select: none;
-        }
+        .clap-particle { position: fixed; pointer-events: none; z-index: 99999; font-size: 1.5rem; user-select: none; }
 
         /* --- Modal --- */
         #image-modal { 
@@ -94,20 +89,17 @@
             align-items: center; justify-content: center; 
             background: rgba(255,255,255,0.98); opacity: 0; 
         }
-        #modal-image { max-width: 90%; max-height: 80%; object-fit: contain; transform: scale(0.95); }
+        #modal-image { max-width: 90%; max-height: 85%; object-fit: contain; transform: scale(0.95); }
         .close-btn { 
             position: fixed; top: 2rem; right: 2rem; z-index: 20000; 
             width: 50px; height: 50px; background: #000; border-radius: 50%; 
-            display: flex; justify-content: center; align-items: center; 
-            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); cursor: none; 
+            display: flex; justify-content: center; align-items: center; cursor: none;
         }
-        .close-btn svg { stroke: #fff; transition: 0.4s; }
-        .close-btn:hover { background: #fff; transform: scale(0.9); }
-        .close-btn:hover svg { stroke: #000; transform: rotate(90deg); }
+        .close-btn svg { stroke: #fff; }
 
         /* --- Footer --- */
         .contact-section { background-color: var(--bg-footer); color: #fff; }
-        .link-anchor { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 1.5rem 0; font-size: 1.5rem; transition: 0.3s; }
+        .link-anchor { display: flex; justify-content: space-between; border-bottom: 1px solid #333; padding: 1.5rem 0; font-size: 1.5rem; transition: 0.3s; text-decoration: none; color: inherit; }
         .link-anchor:hover { padding-left: 1rem; color: #ccc; }
     </style>
 </head>
@@ -122,26 +114,26 @@
     <header class="header-section container-padding">
         <div class="parallax-bg" id="parallax-text">RUO<br>CHEN</div>
         <div class="header-content">
-            <p id="user-role" style="font-size: 0.75rem; margin-bottom: 2rem; letter-spacing: 0.4em; text-transform: uppercase; color: #6b7280;"></p>
+            <p id="user-role" style="font-size: 0.75rem; margin-bottom: 2rem; letter-spacing: 0.4em; text-transform: uppercase; color: #6b7280; line-height: 1.6;"></p>
             <h1 id="user-name" class="user-name"></h1>
-            <div style="width: 6rem; height: 2px; background-color: #000; margin-bottom: 3rem;" class="line-anim"></div>
-            <p id="user-bio" style="font-size: 1.1rem; line-height: 2; color: #374151; max-width: 36rem;"></p>
+            <div style="width: 6rem; height: 2px; background-color: #000; margin-bottom: 3rem;"></div>
+            <p id="user-bio" style="font-size: 1.1rem; line-height: 1.8; color: #374151; max-width: 45rem; word-break: break-word;"></p>
         </div>
     </header>
 
     <section class="gallery-section section-py container-padding">
         <div class="section-header">
-            <h2 style="font-size: 2.5rem;">Works</h2>
+            <h2 style="font-size: 2.5rem; font-weight: 800;">Works</h2>
             <span style="font-size: 10px; font-weight: 700; color: #9ca3af;">01 Gallery</span>
         </div>
         <div id="gallery-grid"></div>
     </section>
 
     <footer class="contact-section section-py container-padding">
-        <ul id="links-list"></ul>
+        <ul id="links-list" style="list-style: none;"></ul>
         <div style="margin-top:8rem; font-size:10px; color:#666; display:flex; justify-content:space-between;">
             <p id="copyright"></p>
-            <p>EYAN / PORTFOLIO v1.7</p>
+            <p>EYAN / PORTFOLIO v1.8.1</p>
         </div>
     </footer>
 
@@ -153,23 +145,31 @@
     <script>
         const config = {
             name: "RUOCHEN WANG",
-            role: "Multilingual Specialist / Graphic Designer",
-            bio: "台湾出身、日本語（N1）・台湾語・英語を操るマルチリンガルです。",
+            role: "MULTILINGUAL SPECIALIST / GRAPHIC DESIGNER / SALES & OPERATIONS",
+            bio: "台湾出身、日本語（N1）・台湾語（北京語）・英語の3か国語を操るマルチリンガルです。",
             maxImages: 18,
             metaData: [{ icon: "🎨" }, { icon: "📱" }, { icon: "💻" }, { icon: "📸" }, { icon: "✨" }],
-            links: [{ label: "LinkedIn", url: "#" }, { label: "Dribbble", url: "#" }, { label: "Email", url: "mailto:ruoches@outlook.com" }]
+            links: [
+                { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" }, 
+                { label: "Dribbble", url: "https://dribbble.com/RuocheWan/about" }, 
+                { label: "Email", url: "mailto:ruoches@outlook.com" }
+            ]
         };
 
         document.addEventListener('DOMContentLoaded', () => {
             const nameEl = document.getElementById('user-name');
             nameEl.innerHTML = config.name.split(' ').map(w => `<span class="reveal-text"><span>${w}</span></span>`).join('<br>');
+            
+            // 確保 Role 也能觸發文字動畫
             document.getElementById('user-role').innerHTML = `<span class="reveal-text"><span>${config.role}</span></span>`;
             document.getElementById('user-bio').innerText = config.bio;
             document.getElementById('copyright').innerText = `© ${new Date().getFullYear()} ${config.name}`;
+            
             const linksList = document.getElementById('links-list');
             config.links.forEach(link => {
                 linksList.innerHTML += `<li><a href="${link.url}" target="_blank" class="link-anchor"><span>${link.label}</span><span>↗</span></a></li>`;
             });
+
             setupGallery();
             initCursor();
             initParallax();
@@ -195,31 +195,28 @@
             startAnim();
         }
 
-        // --- 核心修復：粒子噴發特效 ---
+        // 噴發特效核心
         function handleClap(e, btn, icon) {
             e.stopPropagation();
             const count = btn.querySelector('.count');
             count.style.display = 'inline'; count.innerText = parseInt(count.innerText) + 1;
             
-            // 每次點擊噴發 6 個粒子
-            for(let i=0; i<6; i++) {
+            for(let i=0; i<8; i++) {
                 const p = document.createElement('div');
                 p.className = 'clap-particle';
-                // 隨機顯示 icon 或 星星
                 p.innerText = Math.random() > 0.5 ? icon : '✨';
                 p.style.left = e.clientX + 'px';
                 p.style.top = e.clientY + 'px';
                 document.body.appendChild(p);
                 
-                // 動畫：向四周彈射並旋轉消失
                 anime({
                     targets: p,
-                    translateX: (Math.random() - 0.5) * 300,
-                    translateY: (Math.random() - 0.5) * 300,
-                    rotate: (Math.random() - 0.5) * 45,
+                    translateX: (Math.random() - 0.5) * 350,
+                    translateY: (Math.random() - 0.5) * 350,
+                    rotate: (Math.random() - 0.5) * 100,
                     opacity: [1, 0],
-                    scale: [0.5, 1.5],
-                    duration: 1000 + Math.random() * 500,
+                    scale: [0.5, 2],
+                    duration: 1200 + Math.random() * 500,
                     easing: 'easeOutExpo',
                     complete: () => p.remove()
                 });
@@ -229,8 +226,9 @@
         function startAnim() {
             const tl = anime.timeline({ easing: 'easeOutExpo' });
             tl.add({ targets: '.loader-text', translateY: [20, 0], opacity: [0, 1], duration: 800 })
-              .add({ targets: '#loader', translateY: '-100%', duration: 1000, easing: 'easeInOutExpo', delay: 800 })
+              .add({ targets: '#loader', translateY: '-100%', duration: 1000, easing: 'easeInOutExpo', delay: 400 })
               .add({ targets: '.reveal-text span', translateY: ['100%', '0%'], opacity: [0, 1], duration: 1000, delay: anime.stagger(100) }, '-=600');
+            
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(en => { if(en.isIntersecting) en.target.classList.add('is-visible'); });
             }, { threshold: 0.1 });
@@ -257,7 +255,6 @@
             const m = document.getElementById('image-modal'); const mi = document.getElementById('modal-image');
             mi.src = src; m.style.display = 'flex';
             anime({ targets: m, opacity: [0, 1], duration: 400, easing: 'easeOutQuad' });
-            anime({ targets: mi, scale: [0.95, 1], opacity: [0, 1], duration: 600 });
             document.body.style.overflow = 'hidden';
         }
         function closeModal() {
