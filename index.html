@@ -36,12 +36,12 @@
             #custom-cursor { display: none; }
         }
 
-        /* --- 自訂鼠標 --- */
+        /* --- 自訂鼠標 (極速響應) --- */
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: var(--cursor-size); height: var(--cursor-size);
             border: 1px solid #fff; border-radius: 50%; pointer-events: none; z-index: 9999;
             mix-blend-mode: difference;
-            transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1), background-color 0.3s ease;
+            transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
             will-change: transform;
         }
         #custom-cursor.hovered { width: var(--cursor-hover-size); height: var(--cursor-hover-size); background-color: #fff; }
@@ -83,40 +83,39 @@
         .section-title { font-size: 2.5rem; font-weight: 700; }
         .section-number { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9ca3af; margin-bottom: 0.5rem; }
 
-        /* --- 作品集 + VIEW 提示 --- */
+        /* --- 作品集 + 優化後的 VIEW --- */
         #gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 768px) { #gallery-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { #gallery-grid { grid-template-columns: repeat(3, 1fr); } }
         
         .gallery-item { position: relative; aspect-ratio: 1; overflow: hidden; background-color: #eee; opacity: 0; transform: translateY(30px); }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
-        .gallery-item:hover img { transform: scale(1.1); }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
         .gallery-item.is-visible { opacity: 1; transform: translateY(0); }
 
-        /* VIEW 遮罩層樣式 */
+        /* 移除 Blur，改用單純的透明度變化，效能最佳 */
         .gallery-overlay {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.1);
-            opacity: 0; transition: opacity 0.5s ease;
+            position: absolute; inset: 0; background: rgba(0,0,0,0.4);
+            opacity: 0; transition: opacity 0.3s ease;
         }
         .gallery-item:hover .gallery-overlay { opacity: 1; }
         
         .gallery-caption {
             position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: 0.5s ease; transform: scale(0.9);
+            opacity: 0; transition: 0.3s ease;
         }
-        .gallery-item:hover .gallery-caption { opacity: 1; transform: scale(1); }
+        .gallery-item:hover .gallery-caption { opacity: 1; }
         
+        /* 純白細線邊框，不使用磨砂濾鏡 */
         .view-btn {
-            color: #fff; font-size: 0.75rem; letter-spacing: 0.4em; font-weight: 300;
-            border: 1px solid rgba(255, 255, 255, 0.5); padding: 0.8rem 1.5rem;
-            backdrop-filter: blur(5px); background: rgba(0,0,0,0.2);
+            color: #fff; font-size: 0.7rem; letter-spacing: 0.4em; font-weight: 400;
+            border: 1px solid rgba(255, 255, 255, 0.8); padding: 0.8rem 1.6rem;
+            background: rgba(255, 255, 255, 0.1); 
         }
 
         .item-clap-btn {
             position: absolute; bottom: 15px; right: 15px; z-index: 30;
-            background: rgba(255,255,255,0.8); backdrop-filter: blur(4px);
-            border: none; border-radius: 20px; padding: 5px 12px; font-size: 0.8rem;
-            display: flex; align-items: center; gap: 5px; cursor: none;
+            background: rgba(255,255,255,0.9); border: none; border-radius: 20px; 
+            padding: 5px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: none;
         }
         .clap-particle { position: fixed; pointer-events: none; z-index: 20000; font-size: 1.5rem; }
 
@@ -272,8 +271,13 @@
 
         function initCursor() {
             const cursor = document.getElementById('custom-cursor');
-            document.addEventListener('mousemove', e => { cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`; });
-            document.addEventListener('mouseover', e => { if(e.target.closest('a, button, .gallery-item')) cursor.classList.add('hovered'); else cursor.classList.remove('hovered'); });
+            document.addEventListener('mousemove', e => { 
+                cursor.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0) translate(-50%, -50%)`; 
+            });
+            document.addEventListener('mouseover', e => { 
+                if(e.target.closest('a, button, .gallery-item')) cursor.classList.add('hovered'); 
+                else cursor.classList.remove('hovered'); 
+            });
         }
 
         function initParallax() {
