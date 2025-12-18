@@ -21,28 +21,18 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { background-color: var(--bg-body); overscroll-behavior-y: none; }
         body {
             font-family: var(--font-main); background-color: var(--bg-body);
             color: var(--text-main); -webkit-font-smoothing: antialiased;
             overflow-x: hidden; width: 100%; cursor: none; overscroll-behavior-y: none;
         }
-        a { text-decoration: none; color: inherit; }
-        ul { list-style: none; }
-
-        @media (hover: none) and (pointer: coarse) {
-            body { cursor: auto; }
-            #custom-cursor { display: none; }
-        }
-
-        /* --- 自訂鼠標 (修正層級) --- */
+        
+        /* --- 自訂鼠標 --- */
         #custom-cursor {
             position: fixed; top: 0; left: 0; width: var(--cursor-size); height: var(--cursor-size);
             border: 1px solid #fff; border-radius: 50%; pointer-events: none; 
-            z-index: 20001; /* 確保在 Modal 之上 */
-            mix-blend-mode: difference;
+            z-index: 30001; mix-blend-mode: difference;
             transition: width 0.3s cubic-bezier(0.19, 1, 0.22, 1), height 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-            will-change: transform;
         }
         #custom-cursor.hovered { width: var(--cursor-hover-size); height: var(--cursor-hover-size); background-color: #fff; }
 
@@ -53,6 +43,7 @@
         }
         .loader-text { font-size: 1.5rem; font-weight: 300; letter-spacing: 0.3em; transform: translateY(100%); opacity: 0; }
 
+        /* --- Layout --- */
         .container-padding { padding-left: var(--spacing-container); padding-right: var(--spacing-container); }
         @media (min-width: 768px) { .container-padding { padding-left: var(--spacing-container-md); padding-right: var(--spacing-container-md); } }
         .section-py { padding-top: 8rem; padding-bottom: 8rem; }
@@ -64,24 +55,12 @@
             opacity: 0.3; mix-blend-mode: multiply; pointer-events: none; z-index: 0;
             line-height: 0.8; font-size: 15vw; will-change: transform;
         }
-        .user-role { font-size: 0.75rem; margin-bottom: 2rem; letter-spacing: 0.4em; text-transform: uppercase; color: #6b7280; font-weight: 500; }
         .user-name { font-size: clamp(3rem, 10vw, 8rem); font-weight: 800; letter-spacing: -0.05em; margin-bottom: 3rem; line-height: 1.1; }
-        .separator-line { width: 6rem; height: 2px; background-color: #000; margin-bottom: 3rem; transform: scaleX(0); transform-origin: left; }
-        .user-bio { font-size: 1.1rem; line-height: 2; font-weight: 500; color: #374151; max-width: 36rem; }
         .reveal-text { overflow: hidden; display: inline-block; vertical-align: bottom; }
         .reveal-text span { display: block; transform: translateY(100%); opacity: 0; }
 
-        .scroll-indicator { position: absolute; bottom: 2rem; left: var(--spacing-container); display: flex; align-items: center; gap: 1rem; z-index: 10; opacity: 0; }
-        @media (min-width: 768px) { .scroll-indicator { left: var(--spacing-container-md); } }
-        .scroll-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; font-weight: 500; }
-        .scroll-line { width: 1px; height: 40px; background-color: #000; }
-        @keyframes bounce-slow { 0%, 100% { transform: translateY(-25%); } 50% { transform: translateY(0); } }
-
         /* --- Gallery --- */
         .section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 4rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1.5rem; }
-        .section-title { font-size: 2.5rem; font-weight: 700; }
-        .section-number { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: #9ca3af; margin-bottom: 0.5rem; }
-
         #gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 768px) { #gallery-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (min-width: 1024px) { #gallery-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -89,36 +68,40 @@
         .gallery-item { position: relative; aspect-ratio: 1; overflow: hidden; background-color: #eee; opacity: 0; transform: translateY(30px); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s ease; }
         .gallery-item.is-visible { opacity: 1; transform: translateY(0); }
-
         .gallery-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.4); opacity: 0; transition: 0.3s; }
         .gallery-item:hover .gallery-overlay { opacity: 1; }
         .gallery-caption { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0; transition: 0.3s; }
         .gallery-item:hover .gallery-caption { opacity: 1; }
         .view-btn { color: #fff; font-size: 0.7rem; letter-spacing: 0.4em; border: 1px solid rgba(255, 255, 255, 0.8); padding: 0.8rem 1.6rem; background: rgba(255,255,255,0.1); }
 
+        /* --- Claps --- */
         .item-clap-btn {
             position: absolute; bottom: 15px; right: 15px; z-index: 30;
-            background: rgba(255,255,255,0.9); border: none; border-radius: 20px; 
-            padding: 5px 12px; font-size: 0.8rem; display: flex; align-items: center; gap: 5px; cursor: none;
+            background: rgba(255,255,255,0.95); border: none; border-radius: 20px; 
+            padding: 6px 14px; font-size: 0.9rem; display: flex; align-items: center; gap: 6px; cursor: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.2s ease;
+        }
+        .item-clap-btn:active { transform: scale(0.9); }
+        /* 粒子特效樣式 */
+        .clap-particle { 
+            position: fixed; pointer-events: none; z-index: 30000; 
+            font-size: 1.5rem; user-select: none;
         }
 
-        /* --- Modal (修正關閉按鈕特效) --- */
+        /* --- Modal --- */
         #image-modal { 
             position: fixed; inset: 0; z-index: 15000; display: none; 
             align-items: center; justify-content: center; 
             background: rgba(255,255,255,0.98); opacity: 0; 
         }
-        #modal-image { max-width: 90%; max-height: 80%; object-fit: contain; opacity: 0; transform: scale(0.95); }
-        
+        #modal-image { max-width: 90%; max-height: 80%; object-fit: contain; transform: scale(0.95); }
         .close-btn { 
             position: fixed; top: 2rem; right: 2rem; z-index: 20000; 
             width: 50px; height: 50px; background: #000; border-radius: 50%; 
             display: flex; justify-content: center; align-items: center; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-            cursor: none; 
+            transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); cursor: none; 
         }
-        .close-btn svg { stroke: #fff; transition: all 0.4s; }
-        /* 關閉按鈕 Hover 特效 */
+        .close-btn svg { stroke: #fff; transition: 0.4s; }
         .close-btn:hover { background: #fff; transform: scale(0.9); }
         .close-btn:hover svg { stroke: #000; transform: rotate(90deg); }
 
@@ -139,68 +122,42 @@
     <header class="header-section container-padding">
         <div class="parallax-bg" id="parallax-text">RUO<br>CHEN</div>
         <div class="header-content">
-            <p id="user-role" class="user-role"></p>
+            <p id="user-role" style="font-size: 0.75rem; margin-bottom: 2rem; letter-spacing: 0.4em; text-transform: uppercase; color: #6b7280;"></p>
             <h1 id="user-name" class="user-name"></h1>
-            <div class="separator-line line-anim"></div>
-            <p id="user-bio" class="user-bio"></p>
-        </div>
-        <div class="scroll-indicator">
-            <span class="scroll-text">Scroll</span>
-            <div class="scroll-line"></div>
+            <div style="width: 6rem; height: 2px; background-color: #000; margin-bottom: 3rem;" class="line-anim"></div>
+            <p id="user-bio" style="font-size: 1.1rem; line-height: 2; color: #374151; max-width: 36rem;"></p>
         </div>
     </header>
 
     <section class="gallery-section section-py container-padding">
         <div class="section-header">
-            <h2 class="section-title">Works</h2>
-            <span class="section-number">01 Gallery</span>
+            <h2 style="font-size: 2.5rem;">Works</h2>
+            <span style="font-size: 10px; font-weight: 700; color: #9ca3af;">01 Gallery</span>
         </div>
         <div id="gallery-grid"></div>
     </section>
 
-    <section class="section-py container-padding" style="background:#f8f8f8;">
-        <div class="section-header">
-            <h2 class="section-title" id="free-text-title"></h2>
-            <span class="section-number">02 Info</span>
-        </div>
-        <p id="free-text-body" style="max-width:800px; line-height:2.2; color:#555; font-size:1.1rem; white-space:pre-line;"></p>
-    </section>
-
     <footer class="contact-section section-py container-padding">
-        <div class="section-header" style="border-bottom-color: #333;">
-            <h2 class="section-title" style="color:#fff;">Let's connect.</h2>
-            <span class="section-number" style="color:#666;">03 Contact</span>
-        </div>
-        <ul id="links-list" style="margin-top: 2rem;"></ul>
+        <ul id="links-list"></ul>
         <div style="margin-top:8rem; font-size:10px; color:#666; display:flex; justify-content:space-between;">
             <p id="copyright"></p>
-            <p>EYAN / SIMPLE THEME</p>
+            <p>EYAN / PORTFOLIO v1.7</p>
         </div>
     </footer>
 
     <div id="image-modal" onclick="closeModal()">
-        <div class="close-btn">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        </div>
-        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;">
-            <img id="modal-image" src="" onclick="event.stopPropagation()">
-        </div>
+        <div class="close-btn"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+        <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"><img id="modal-image" src="" onclick="event.stopPropagation()"></div>
     </div>
 
     <script>
         const config = {
             name: "RUOCHEN WANG",
-            role: "Multilingual Specialist / Graphic Designer / Sales & Operations",
-            bio: "台湾出身、日本語（N1）・台湾語（北京語）・英語の3か国語を操るマルチリンガルです。",
-            freeTextTitle: "About Me",
-            freeTextBody: "「言葉と言葉、デザインとビジネスをつなぐ」\n台湾でデザインを学び、2016年に来日。京都・東京・静岡などを拠点に、「デザイン」「語學」「マネジメント」を軸としたキャリアを築いてきました。",
+            role: "Multilingual Specialist / Graphic Designer",
+            bio: "台湾出身、日本語（N1）・台湾語・英語を操るマルチリンガルです。",
             maxImages: 18,
             metaData: [{ icon: "🎨" }, { icon: "📱" }, { icon: "💻" }, { icon: "📸" }, { icon: "✨" }],
-            links: [
-                { label: "LinkedIn", url: "https://www.linkedin.com/in/ruochen-wang-624b02341" },
-                { label: "Dribbble", url: "https://dribbble.com/RuocheWan/about" },
-                { label: "Email", url: "mailto:ruoches@outlook.com" }
-            ]
+            links: [{ label: "LinkedIn", url: "#" }, { label: "Dribbble", url: "#" }, { label: "Email", url: "mailto:ruoches@outlook.com" }]
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -208,15 +165,11 @@
             nameEl.innerHTML = config.name.split(' ').map(w => `<span class="reveal-text"><span>${w}</span></span>`).join('<br>');
             document.getElementById('user-role').innerHTML = `<span class="reveal-text"><span>${config.role}</span></span>`;
             document.getElementById('user-bio').innerText = config.bio;
-            document.getElementById('free-text-title').innerText = config.freeTextTitle;
-            document.getElementById('free-text-body').innerText = config.freeTextBody;
             document.getElementById('copyright').innerText = `© ${new Date().getFullYear()} ${config.name}`;
-
             const linksList = document.getElementById('links-list');
             config.links.forEach(link => {
                 linksList.innerHTML += `<li><a href="${link.url}" target="_blank" class="link-anchor"><span>${link.label}</span><span>↗</span></a></li>`;
             });
-
             setupGallery();
             initCursor();
             initParallax();
@@ -242,23 +195,42 @@
             startAnim();
         }
 
+        // --- 核心修復：粒子噴發特效 ---
         function handleClap(e, btn, icon) {
             e.stopPropagation();
             const count = btn.querySelector('.count');
             count.style.display = 'inline'; count.innerText = parseInt(count.innerText) + 1;
-            const p = document.createElement('div'); p.className = 'clap-particle'; p.innerText = icon;
-            p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px'; document.body.appendChild(p);
-            anime({ targets: p, translateX: (Math.random()-0.5)*200, translateY: (Math.random()-0.5)*200, opacity: [1, 0], scale: [1, 0], duration: 1500, easing: 'easeOutExpo', complete: () => p.remove() });
+            
+            // 每次點擊噴發 6 個粒子
+            for(let i=0; i<6; i++) {
+                const p = document.createElement('div');
+                p.className = 'clap-particle';
+                // 隨機顯示 icon 或 星星
+                p.innerText = Math.random() > 0.5 ? icon : '✨';
+                p.style.left = e.clientX + 'px';
+                p.style.top = e.clientY + 'px';
+                document.body.appendChild(p);
+                
+                // 動畫：向四周彈射並旋轉消失
+                anime({
+                    targets: p,
+                    translateX: (Math.random() - 0.5) * 300,
+                    translateY: (Math.random() - 0.5) * 300,
+                    rotate: (Math.random() - 0.5) * 45,
+                    opacity: [1, 0],
+                    scale: [0.5, 1.5],
+                    duration: 1000 + Math.random() * 500,
+                    easing: 'easeOutExpo',
+                    complete: () => p.remove()
+                });
+            }
         }
 
         function startAnim() {
             const tl = anime.timeline({ easing: 'easeOutExpo' });
             tl.add({ targets: '.loader-text', translateY: [20, 0], opacity: [0, 1], duration: 800 })
               .add({ targets: '#loader', translateY: '-100%', duration: 1000, easing: 'easeInOutExpo', delay: 800 })
-              .add({ targets: '.reveal-text span', translateY: ['100%', '0%'], opacity: [0, 1], duration: 1000, delay: anime.stagger(100) }, '-=600')
-              .add({ targets: '.line-anim', scaleX: [0, 1], duration: 800 }, '-=800')
-              .add({ targets: '.scroll-indicator', opacity: [0, 0.6], translateY: [20, 0], duration: 800 });
-
+              .add({ targets: '.reveal-text span', translateY: ['100%', '0%'], opacity: [0, 1], duration: 1000, delay: anime.stagger(100) }, '-=600');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(en => { if(en.isIntersecting) en.target.classList.add('is-visible'); });
             }, { threshold: 0.1 });
